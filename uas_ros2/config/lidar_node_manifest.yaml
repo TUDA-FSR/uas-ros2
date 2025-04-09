@@ -1,3 +1,0 @@
-LidarDetectObstacle:
-  class_name: uas_ros2::bt::DetectObstacle
-  port: /scan

@@ -32,7 +32,7 @@ std::vector<float> apply_median_filter(const std::deque<sensor_msgs::msg::LaserS
   return {values[values.size() / 2]};
 }
 
-namespace uas_ros2::bt
+namespace uas_devices::bt
 {
 
 class DetectObstacle : public auto_apms_behavior_tree::core::RosSubscriberNode<sensor_msgs::msg::LaserScan>
@@ -126,7 +126,7 @@ private:
   std::deque<sensor_msgs::msg::LaserScan> scans;
 };
 
-}  // namespace uas_ros2::bt
+}  // namespace uas_devices::bt
 
 // Make the nodes discoverable for the class loader
-AUTO_APMS_BEHAVIOR_TREE_DECLARE_NODE(uas_ros2::bt::DetectObstacle)
+AUTO_APMS_BEHAVIOR_TREE_DECLARE_NODE(uas_devices::bt::DetectObstacle)

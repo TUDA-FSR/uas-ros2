@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4"
+      main_tree_to_execute="NewTree">
+  <BehaviorTree ID="LidarTest">
+    <Sequence>
+      <EnableHold port=""/>
+      <RetryUntilSuccessful num_attempts="-1">
+        <LidarDetectObstacle cone_width="40"
+                             distance="4"
+                             threshold="0.05"
+                             port=""/>
+      </RetryUntilSuccessful>
+      <Land port=""/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="NewTree">
+    <ReactiveFallback>
+      <KeepRunningUntilFailure>
+        <ReactiveSequence>
+          <LidarDetectObstacle cone_width="20"
+                               distance="4"
+                               threshold="0.25"
+                               port=""/>
+          <EnableHold port=""/>
+        </ReactiveSequence>
+      </KeepRunningUntilFailure>
+      <KeepRunningUntilFailure>
+        <SequenceWithMemory>
+          <Takeoff alt="{@alt}"
+                   port=""/>
+          <GoTo lat="49.8603164"
+                lon="8.6861893"
+                alt="{@alt}"
+                port=""/>
+          <Land port=""/>
+          <Arm wait_until_ready_to_arm="true"
+               port=""/>
+          <Takeoff alt="{@alt}"
+                   port=""/>
+          <GoTo lat="49.8603942"
+                lon="8.6861510"
+                alt="{@alt}"
+                port=""/>
+          <Land port=""/>
+          <Arm wait_until_ready_to_arm="true"
+               port=""/>
+        </SequenceWithMemory>
+      </KeepRunningUntilFailure>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="Temp">
+    <ReactiveFallback>
+      <KeepRunningUntilFailure>
+        <ReactiveSequence>
+          <LidarDetectObstacle cone_width="30"
+                               distance="1"
+                               threshold="0.25"
+                               port=""/>
+          <AsyncSequence>
+            <AlwaysSuccess/>
+            <EnableHold port=""/>
+          </AsyncSequence>
+        </ReactiveSequence>
+      </KeepRunningUntilFailure>
+      <KeepRunningUntilFailure>
+        <SequenceWithMemory>
+          <Takeoff alt="{@alt}"
+                   port=""/>
+          <GoTo lat=""
+                lon=""
+                alt="{@alt}"
+                port=""/>
+          <Land port=""/>
+          <Takeoff alt="{@alt}"
+                   port=""/>
+          <GoTo lat=""
+                lon=""
+                alt="{@alt}"
+                port=""/>
+          <Land port=""/>
+        </SequenceWithMemory>
+      </KeepRunningUntilFailure>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="Arm">
+      <input_port name="wait_until_ready_to_arm"
+                  default="true"
+                  type="bool">Wait for the UAV to be ready for arming. If false and UAV is not ready to arm, will be rejected.</input_port>
+      <input_port name="port"
+                  type="std::string">Name of the ROS 2 action.</input_port>
+    </Action>
+    <Action ID="EnableHold">
+      <input_port name="port"
+                  type="std::string">Name of the ROS 2 action.</input_port>
+    </Action>
+    <Action ID="GoTo">
+      <input_port name="lat"
+                  type="double">Target latitude</input_port>
+      <input_port name="lon"
+                  type="double">Target longitude</input_port>
+      <input_port name="alt"
+                  type="double">Target altitude in meter (AMSL)</input_port>
+      <input_port name="port"
+                  type="std::string">Name of the ROS 2 action.</input_port>
+    </Action>
+    <Action ID="Land">
+      <input_port name="port"
+                  type="std::string">Name of the ROS 2 action.</input_port>
+    </Action>
+    <Condition ID="LidarDetectObstacle">
+      <input_port name="cone_width"
+                  default="180.000000"
+                  type="double">Width [°] of the forward facing cone (centered around 0°) specifying the field of view to be considered.</input_port>
+      <input_port name="distance"
+                  type="double">Distance [m] at which an obstacle will be considered detected.</input_port>
+      <input_port name="threshold"
+                  default="0.500000"
+                  type="double">Threshold [%] determining how many of the measured points must be within the configured range for the detection to be triggered.</input_port>
+      <input_port name="port"
+                  type="std::string">Name of the ROS 2 topic to subscribe to.</input_port>
+    </Condition>
+    <Action ID="Takeoff">
+      <input_port name="alt"
+                  type="double">Target takeoff altitude in meter (AMSL)</input_port>
+      <input_port name="port"
+                  type="std::string">Name of the ROS 2 action.</input_port>
+    </Action>
+  </TreeNodesModel>
+
+</root>
